@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import HomePage from "./pages/HomePage";
 import TimedMode from "./pages/TimedMode";
 import InfiniteMode from "./pages/InfiniteMode";
+import Leaderboard from "./pages/Leaderboard";
 
 const Stack = createStackNavigator();
 
@@ -14,6 +15,7 @@ const App = () => {
         <Stack.Screen name="Home" component={HomePage} />
         <Stack.Screen name="TimedMode" component={TimedMode} />
         <Stack.Screen name="InfiniteMode" component={InfiniteMode} />
+        <Stack.Screen name="Leaderboard" component={Leaderboard} />
       </Stack.Navigator>
     </NavigationContainer>
   );

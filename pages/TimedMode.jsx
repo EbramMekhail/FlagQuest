@@ -4,13 +4,15 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
+  TextInput,
+  Modal,
   Alert,
 } from "react-native";
 
 import Image from "react-native-remote-svg";
 
 import countries from "../components/countries";
-
+import scores from "../components/scores";
 const shuffleArray = (array) => {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -23,8 +25,11 @@ const TimedMode = () => {
   const [options, setOptions] = useState([]);
   const [correctCounter, setCorrectCounter] = useState(0);
   const [totalAttempts, setTotalAttempts] = useState(0);
-  const [timer, setTimer] = useState(10);
+  const [timer, setTimer] = useState(30);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [isGameEnded, setIsGameEnded] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [enteredName, setEnteredName] = useState("");
 
   const intervalRef = useRef();
 
@@ -84,20 +89,42 @@ const TimedMode = () => {
 
   const endGame = () => {
     setIsTimerRunning(false);
-    setTimer(10);
-    setTotalAttempts(0);
-    setCorrectCounter(0);
     clearInterval(intervalRef.current);
+    setIsGameEnded(true);
+    setModalVisible(true);
+  };
 
-    // Display a pop-up with the player's score
-    Alert.alert(
-      "Game Over!",
-      `Correct Guesses: ${correctCounter}\nTotal Attempts: ${totalAttempts}`
-    );
+  const submitScore = () => {
+    // Validate the entered name (optional)
+    if (enteredName.trim() === "") {
+      Alert.alert("Error", "Please enter your name.");
+      return;
+    }
+
+    // Add the score to the scores array
+    const newScore = {
+      name: enteredName,
+      score: correctCounter,
+    };
+
+    scores.push(newScore);
+
+    // Handle storing the score data, for example, using AsyncStorage or sending it to a server
+    // scores.push(newScore);
+
+    // Reset game state
+    setCorrectCounter(0);
+    setTotalAttempts(0);
+    setTimer(30);
+    setIsGameEnded(false);
+    setModalVisible(false);
+
+    // Additional actions can be performed here, such as navigating to a leaderboard screen
   };
 
   return (
     <View style={styles.container}>
+      {currentCountry && console.log(currentCountry)}
       {isTimerRunning && <Text style={styles.timer}>Time: {timer}s</Text>}
       {/* {currentCountry && console.log(currentCountry)} */}
       {currentCountry && isTimerRunning && (
@@ -107,10 +134,7 @@ const TimedMode = () => {
             style={styles.flagImage}
             resizeMode={"cover"}
           /> */}
-          <Image
-            source={currentCountry.img}
-            style={{ width: 400, height: 400 }}
-          />
+          <Image source={currentCountry.img} style={styles.flagImage} />
           <View style={styles.horizontalContainer}>
             <Text style={styles.horizontalText}>Correct: {correctCounter}</Text>
             <Text style={styles.horizontalText}>Attempts: {totalAttempts}</Text>
@@ -137,11 +161,74 @@ const TimedMode = () => {
           <Text style={styles.startButtonText}>Start Game</Text>
         </TouchableOpacity>
       )}
+
+      {/* Modal for entering name after the game ends */}
+      <Modal animationType="slide" transparent={true} visible={modalVisible}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Game Over!</Text>
+            <Text style={styles.modalText}>
+              Correct Guesses: {correctCounter} | Total Attempts:{" "}
+              {totalAttempts}
+            </Text>
+            <Text style={styles.modalText}>Enter Your Name:</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Your Name"
+              onChangeText={(text) => setEnteredName(text)}
+            />
+            <TouchableOpacity style={styles.submitButton} onPress={submitScore}>
+              <Text style={styles.submitButtonText}>Submit Score</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 10,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  modalText: {
+    fontSize: 16,
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  input: {
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 10,
+    paddingLeft: 10,
+  },
+  submitButton: {
+    backgroundColor: "#3498db",
+    padding: 15,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  submitButtonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
   timer: {
     fontSize: 18,
     fontWeight: "bold",
@@ -174,10 +261,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#ADD8E6", // Light Blue
   },
   flagImage: {
-    width: "auto",
-    height: "auto",
+    width: 350,
+    height: 150,
+    // height: "auto",
     // aspectRatio: 4 / 3,
-    // resizeMode: "contain",
+    resizeMode: "fill",
     marginBottom: 20,
   },
   title: {

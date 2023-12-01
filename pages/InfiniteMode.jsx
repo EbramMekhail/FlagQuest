@@ -79,10 +79,7 @@ const InfiniteMode = () => {
               style={styles.flagImage}
               resizeMode={"cover"}
             /> */}
-            <Image
-              source={currentCountry.img}
-              style={{ width: 400, height: 400 }}
-            />
+            <Image source={currentCountry.img} style={styles.flagImage} />
             <View style={styles.horizontalContainer}>
               <Text style={styles.horizontalText}>
                 Correct: {correctCounter}
@@ -94,7 +91,7 @@ const InfiniteMode = () => {
                 Correct Ratio: {correctRatio}
               </Text>
               <Text style={styles.horizontalText}>Streak: {currentStreak}</Text>
-              <Text style={styles.horizontalText}>Max Streak: {maxStreak}</Text>
+              {/* <Text style={styles.horizontalText}>Max Streak: {maxStreak}</Text> */}
             </View>
 
             <Text style={styles.title}>Guess the Country:</Text>
@@ -130,10 +127,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#ADD8E6", // Light Blue
   },
   flagImage: {
-    width: "auto",
-    height: "auto",
+    width: 350,
+    height: 150,
+    // height: "auto",
     // aspectRatio: 4 / 3,
-    // resizeMode: "contain",
+    resizeMode: "fill",
     marginBottom: 20,
   },
   title: {
