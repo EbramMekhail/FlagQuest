@@ -13,12 +13,14 @@ const HomePage = ({ navigation }) => {
     navigation.navigate("InfiniteMode");
   };
 
+    const handleLeaderboardPress = () => {
+      // Navigate to the Infinite Mode screen
+      navigation.navigate("Leaderboard");
+    };
+
   return (
     <View style={styles.container}>
-      <Image
-        source={require("../assets/globe.png")}
-        style={styles.flagImage}
-      />
+      <Image source={require("../assets/globe.png")} style={styles.flagImage} />
 
       <Text style={styles.title}>Flag Guessing Game</Text>
       <TouchableOpacity style={styles.button} onPress={handleTimedModePress}>
@@ -26,6 +28,9 @@ const HomePage = ({ navigation }) => {
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={handleInfiniteModePress}>
         <Text style={styles.buttonText}>Infinite Mode</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={handleLeaderboardPress}>
+        <Text style={styles.buttonText}>Leaderboard</Text>
       </TouchableOpacity>
     </View>
   );
