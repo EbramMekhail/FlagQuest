@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
-import countries from "../components/countries";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
+import Image from "react-native-remote-svg";
+import countries from "../components/countries";
 
 const shuffleArray = (array) => {
   // Shuffle the array using the Fisher-Yates algorithm
@@ -73,7 +74,15 @@ const InfiniteMode = () => {
         (console.log(currentCountry),
         (
           <React.Fragment>
-            <Image source={currentCountry.img} style={styles.flagImage} />
+            {/* <Image
+              source={currentCountry.img}
+              style={styles.flagImage}
+              resizeMode={"cover"}
+            /> */}
+            <Image
+              source={currentCountry.img}
+              style={{ width: 400, height: 400 }}
+            />
             <View style={styles.horizontalContainer}>
               <Text style={styles.horizontalText}>
                 Correct: {correctCounter}
@@ -121,9 +130,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#ADD8E6", // Light Blue
   },
   flagImage: {
-    width: "400px",
-    // height: '269px',
-    aspectRatio: 4 / 3,
+    width: "auto",
+    height: "auto",
+    // aspectRatio: 4 / 3,
     // resizeMode: "contain",
     marginBottom: 20,
   },

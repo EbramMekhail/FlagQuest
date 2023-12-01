@@ -2,11 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
-  Image,
   TouchableOpacity,
   StyleSheet,
   Alert,
 } from "react-native";
+
+import Image from "react-native-remote-svg";
 
 import countries from "../components/countries";
 
@@ -101,7 +102,15 @@ const TimedMode = () => {
       {/* {currentCountry && console.log(currentCountry)} */}
       {currentCountry && isTimerRunning && (
         <React.Fragment>
-          <Image source={currentCountry.img} style={styles.flagImage} />
+          {/* <Image
+            source={currentCountry.img}
+            style={styles.flagImage}
+            resizeMode={"cover"}
+          /> */}
+          <Image
+            source={currentCountry.img}
+            style={{ width: 400, height: 400 }}
+          />
           <View style={styles.horizontalContainer}>
             <Text style={styles.horizontalText}>Correct: {correctCounter}</Text>
             <Text style={styles.horizontalText}>Attempts: {totalAttempts}</Text>
@@ -165,9 +174,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#ADD8E6", // Light Blue
   },
   flagImage: {
-    width: "400px",
-    // height: '269px',
-    aspectRatio: 4 / 3,
+    width: "auto",
+    height: "auto",
+    // aspectRatio: 4 / 3,
     // resizeMode: "contain",
     marginBottom: 20,
   },
